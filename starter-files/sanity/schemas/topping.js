@@ -28,7 +28,7 @@ export default {
       vegetarian: 'vegetarian'
     }, 
     prepare: (field) => ({
-      title: `Add extra ${field.name}${field.vegetarian ? '🌱' : '' }`
+      title: `${field.name}${field.vegetarian ? '🌱' : '' }`
     })
   }
 }
