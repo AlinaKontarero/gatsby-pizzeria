@@ -3,20 +3,22 @@ import { graphql } from 'gatsby';
 import PizzaList from '../components/PizzaList';
 import ToppingsFilter from '../components/ToppingsFilter';
 
-export default function PizzasPage({ data }) {
-  const pizzas = data.allSanityPizza.nodes;
+export default function PizzasPage({ data, pageContext }) {
+  const pizzas = data.pizzas.nodes;
 
   return (
     <>
-      <ToppingsFilter />
+      <ToppingsFilter activeTopping={pageContext.topping} />
       <p>Hei! There are {pizzas.length} Pizzas! </p>
       <PizzaList pizzas={pizzas} />
     </>
   );
 }
 export const query = graphql`
-  query PizzaQuery {
-    allSanityPizza {
+  query PizzaQuery($toppingRegex: String) {
+    pizzas: allSanityPizza(
+      filter: { toppings: { elemMatch: { name: { regex: $toppingRegex } } } }
+    ) {
       nodes {
         name
         id
