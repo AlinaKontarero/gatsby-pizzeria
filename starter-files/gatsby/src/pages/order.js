@@ -4,8 +4,10 @@ import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
 import SEO from '../components/SEO';
 import useForm from '../utils/useForm';
-import calculatePizzaPrice from '../utils/calculatePizzaPrice'
+import calculatePizzaPrice from '../utils/calculatePizzaPrice';
 import formatMoney from '../utils/formatMoney';
+import OrderStyles from '../styles/OrderStyles';
+import MenuItemStyles from '../styles/MenuItemStyles';
 
 export default function OrderPage({ data }) {
   const { values, updateValue } = useForm({
@@ -14,9 +16,9 @@ export default function OrderPage({ data }) {
   });
   const pizzas = data.pizzas.nodes;
   return (
-    <div>
+    <>
       <SEO title="Order a Pizza" />
-      <form>
+      <OrderStyles>
         <fieldset>
           <legend>Your info</legend>
           <label htmlFor="name">Name</label>
@@ -29,17 +31,17 @@ export default function OrderPage({ data }) {
           />
           <label htmlFor="email">Email</label>
           <input
-            type="text"
+            type="email"
             name="email"
             id="email"
             value={values.email}
             onChange={updateValue}
           />
         </fieldset>
-        <fieldset>
+        <fieldset className="menu">
           <legend>Menu</legend>
           {pizzas.map((pizza) => (
-            <div key={pizza.id}>
+            <MenuItemStyles key={pizza.id}>
               <Img
                 fluid={pizza.image.asset.fluid}
                 width="50"
@@ -57,15 +59,14 @@ export default function OrderPage({ data }) {
                   </button>
                 ))}
               </div>
-            </div>
+            </MenuItemStyles>
           ))}
         </fieldset>
-        <fieldset>
+        <fieldset className="order">
           <legend>Order</legend>
         </fieldset>
-      </form>
-      <p>Hei! I'm the Order Page </p>
-    </div>
+      </OrderStyles>
+    </>
   );
 }
 
