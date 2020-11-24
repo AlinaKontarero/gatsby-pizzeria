@@ -22,7 +22,7 @@ const OrderStyles = styled.form`
     fieldset.order {
       grid-column: span 2;
     }
-  } */ 
+  } */
 `;
 
 export default OrderStyles;
