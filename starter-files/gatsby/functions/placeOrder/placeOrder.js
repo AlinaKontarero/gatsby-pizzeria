@@ -40,7 +40,14 @@ transporter.sendMail({
   html: `<p>Your new pizza is here!</p>`,
 });
 
+function wait(ms = 0) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 exports.handler = async (event, context) => {
+  await wait(5000);
   const body = JSON.parse(event.body);
   console.log(body);
   // validate coming data
@@ -54,6 +61,13 @@ exports.handler = async (event, context) => {
         body: JSON.stringify({ message: `Oops! You forgot to add ${field}` }),
       };
     }
+  }
+
+  if (!body.order.length) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: `Why you ordered nothing?!` }),
+    };
   }
 
   // send an email
