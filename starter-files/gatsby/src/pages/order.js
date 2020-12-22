@@ -16,6 +16,7 @@ export default function OrderPage({ data }) {
   const { values, updateValue } = useForm({
     name: '',
     email: '',
+    mapleSyrup: '',
   });
   const pizzas = data.pizzas.nodes;
   const {
@@ -56,6 +57,14 @@ export default function OrderPage({ data }) {
             value={values.email}
             onChange={updateValue}
           />
+          <input
+            type="mapleSyrup"
+            name="mapleSyrup"
+            id="mapleSyrup"
+            value={values.mapleSyrup}
+            className="mapleSyrup"
+            onChange={updateValue}
+          />
         </fieldset>
         <fieldset className="menu" disabled={loading}>
           <legend>Menu</legend>
@@ -83,7 +92,7 @@ export default function OrderPage({ data }) {
                       });
                     }}
                   >
-                    {size} 
+                    {size}
                     {formatMoney(calculatePizzaPrice(pizza.price, size))}
                   </button>
                 ))}

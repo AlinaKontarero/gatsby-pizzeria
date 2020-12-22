@@ -49,6 +49,16 @@ function wait(ms = 0) {
 exports.handler = async (event, context) => {
   await wait(5000);
   const body = JSON.parse(event.body);
+  // Check if `honeypot is submitted:
+  if (body.mapleSyrup) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: `Woop woop! It's a cyber attack! Good bye, little mother hacker`,
+      }),
+    };
+  }
+
   console.log(body);
   // validate coming data
   const requiredFields = ['email', 'name', 'order'];
