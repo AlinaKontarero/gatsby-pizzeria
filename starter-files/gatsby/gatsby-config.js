@@ -7,7 +7,7 @@ export default {
     title: 'Slicks Slices',
     siteUrl: 'https://gatsby-pizza',
     description: 'The best pizza place in the Shire!',
-    facebook: '@slicksSlices'
+    facebook: '@slicksSlices',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
