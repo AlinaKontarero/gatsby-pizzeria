@@ -48,7 +48,6 @@ function useLatestData() {
       .then((res) => res.json())
       .then((res) => {
         // check errors
-        console.log(res.data);
         setHotSlices(res.data.StoreSettings.hotSlices);
         setSlicemasters(res.data.StoreSettings.slicemaster);
       });

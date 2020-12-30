@@ -25,7 +25,6 @@ export default function usePizza({ pizzas, values }) {
 
   const submitOrder = async (e) => {
     e.preventDefault();
-    console.log(e);
     setLoading(true);
     setError(null);
     // setMessage('Go eat');
@@ -38,7 +37,6 @@ export default function usePizza({ pizzas, values }) {
       email: values.email,
       mapleSyrup: values.mapleSyrup,
     };
-    console.log(body);
 
     // 4. send this data with a serverless fn when they check out
     const res = await fetch(
