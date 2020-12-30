@@ -34,20 +34,20 @@ function Pagination({ pageSize, totalCount, currentPage, skip, base }) {
   const hasPrevPage = prevPage >= 1;
   return (
     <PaginationStyles>
-      <Link disabled={!hasPrevPage} to={`/${base}/${prevPage}`}>
+      <a disabled={!hasPrevPage} href={`/${base}/${prevPage}`}>
         &#x2190; Prev
-      </Link>
+      </a>
       {Array.from({ length: totalPages }).map((_, i) => (
-        <Link
+        <a
           className={currentPage === 1 && i === 0 ? 'current' : ''}
-          to={`/${base}/${i > 0 ? i + 1 : ''}`}
+          href={`/${base}/${i > 0 ? i + 1 : ''}`}
         >
           {i + 1}
-        </Link>
+        </a>
       ))}
-      <Link disabled={!hasNextPage} to={`/${base}/${nextPage}`}>
+      <a disabled={!hasNextPage} href={`/${base}/${nextPage}`}>
         Next &#x2192;
-      </Link>
+      </a>
     </PaginationStyles>
   );
 }
