@@ -17,7 +17,6 @@ export default function PizzasPage({ data, pageContext }) {
         }
       />
       <ToppingsFilter activeTopping={pageContext.topping} />
-      <p>Hei! There are {pizzas.length} Pizzas! </p>
       <PizzaList pizzas={pizzas} />
     </>
   );

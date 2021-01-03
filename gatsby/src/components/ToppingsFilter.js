@@ -16,7 +16,7 @@ const ToppingStyles = styled.div`
     background: var(--grey);
     border-radius: 2px;
     text-decoration: none;
-    font-size: clamp(1.5rem, 1.5vw, 2.5rem);
+    font-size: clamp(1.5rem, 1.4vw, 2.5rem);
     .count {
       background: white;
       padding: 2px 5px;
@@ -32,7 +32,7 @@ const ToppingStyles = styled.div`
 
 function countPizzasInToppings(pizzas) {
   const counts = pizzas
-    .map((_pizza) => _pizza.toppings)
+    .map((pizza) => pizza.toppings)
     .flat()
     // eslint-disable-next-line array-callback-return
     .reduce((acc, topping) => {
@@ -70,7 +70,6 @@ export default function ToppingsFilter({ activeTopping }) {
           toppings {
             id
             name
-            vegetarian
           }
         }
       }
@@ -83,15 +82,14 @@ export default function ToppingsFilter({ activeTopping }) {
         <span className="name">All</span>
         <span className="count">{pizzas.nodes.length}</span>
       </Link>
-      <p>{activeTopping}</p>
-      {toppingsWithCounts.map((_topping) => (
+      {toppingsWithCounts.map((topping) => (
         <Link
-          key={_topping.id}
-          to={`topping/${_topping.name}`}
-          className={_topping.name === activeTopping ? 'active' : ''}
+          key={topping.id}
+          to={`/topping/${topping.name}`}
+          className={topping.name === activeTopping ? 'active' : ''}
         >
-          <span className="name">{_topping.name} </span>
-          <span className="count">{_topping.count} </span>
+          <span className="name">{topping.name}</span>
+          <span className="count">{topping.count} </span>
         </Link>
       ))}
     </ToppingStyles>
