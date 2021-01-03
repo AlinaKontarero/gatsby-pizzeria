@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'gatsby';
 import styled from 'styled-components';
 
 const PaginationStyles = styled.div`
@@ -6,6 +7,7 @@ const PaginationStyles = styled.div`
   align-items: center;
   align-content: center;
   justify-items: center;
+  text-align: center;
   border: 1px solid var(--grey);
   margin: 2rem 0;
   border-radius: 5px;
@@ -39,21 +41,21 @@ function Pagination({ pageSize, totalCount, currentPage, skip, base }) {
   const hasPrevPage = prevPage >= 1;
   return (
     <PaginationStyles key={currentPage}>
-      <a disabled={!hasPrevPage} href={`/${base}/${prevPage}`}>
+      <Link disabled={!hasPrevPage} to={`/${base}/${prevPage}`}>
         &#x2190; <span className="word-label"> Prev </span>
-      </a>
+      </Link>
       {Array.from({ length: totalPages }).map((_, i) => (
-        <a
+        <Link
           className={currentPage === 1 && i === 0 ? 'current' : ''}
-          href={`/${base}/${i > 0 ? i + 1 : ''}`}
+          to={`/${base}/${i > 0 ? i + 1 : ''}`}
           key={i}
         >
           {i + 1}
-        </a>
+        </Link>
       ))}
-      <a disabled={!hasNextPage} href={`/${base}/${nextPage}`}>
-       <span className="word-label"> Next </span> &#x2192;
-      </a>
+      <Link disabled={!hasNextPage} to={`/${base}/${nextPage}`}>
+        <span className="word-label"> Next </span> &#x2192;
+      </Link>
     </PaginationStyles>
   );
 }
