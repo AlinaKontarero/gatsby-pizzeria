@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'gatsby';
 import styled from 'styled-components';
 
 const PaginationStyles = styled.div`
@@ -33,7 +32,7 @@ function Pagination({ pageSize, totalCount, currentPage, skip, base }) {
   const hasNextPage = nextPage <= totalPages;
   const hasPrevPage = prevPage >= 1;
   return (
-    <PaginationStyles>
+    <PaginationStyles key={currentPage}>
       <a disabled={!hasPrevPage} href={`/${base}/${prevPage}`}>
         &#x2190; Prev
       </a>

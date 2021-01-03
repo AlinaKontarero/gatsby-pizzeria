@@ -53,7 +53,6 @@ const Nav = () => (
   <NavStyles>
     <ul>
       <li>
-        <Link />
         <Link to="/"> Hot now </Link>
       </li>
       <li>
