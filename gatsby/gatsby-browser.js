@@ -12,5 +12,3 @@ const wrapRootElement = ({ element }) => (
 );
 
 export { wrapPageElement, wrapRootElement };
-
-// 06:18: check in browser if you see any hook states 
