@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
-const generateOrderemail = ({ order, total }) => `
-  <div> 
+function generateOrderEmail({ order, total }) {
+  return `<div>
     <h2> Your recent order for ${total} </h2> 
     <p> Please start walking over, we'll have your order ready in 20 minutes. </p>
     <ul> 
@@ -21,6 +21,7 @@ const generateOrderemail = ({ order, total }) => `
         }
     </style>
   </div>`;
+}
 
 // create a transport for nodemailer
 const transporter = nodemailer.createTransport({
@@ -46,15 +47,14 @@ function wait(ms = 0) {
   });
 }
 
-// 03.27
-module.exports = async (req, res) => {
-  await wait(5000);
-  const { body } = req;
+exports.handler = async (event, context) => {
+  const body = JSON.parse(event.body);
   // Check if `honeypot is submitted:
   if (body.mapleSyrup) {
-    return res.status(400).json({
+    return {
+      statusCode: 400,
       message: `Woop woop! It's a cyber attack! Good bye, little mother hacker`,
-    });
+    };
   }
 
   // validate coming data
@@ -62,16 +62,22 @@ module.exports = async (req, res) => {
 
   for (const field of requiredFields) {
     if (!body[field]) {
-      return res.status(400).json({
-        message: `Oops! You forgot to add ${field}`,
-      });
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: `Oops! You forgot to add ${field}`,
+        }),
+      };
     }
   }
 
   if (!body.order.length) {
-    return res.status(400).json({
-      message: `Why you ordered nothing?!`,
-    });
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: `Why would you order nothing?`,
+      }),
+    };
   }
 
   // send an email
@@ -79,14 +85,13 @@ module.exports = async (req, res) => {
     from: "Slick's Slices <slick@example.com>",
     to: `${body.name} <${body.email}>, orders@example.com`,
     subject: 'New order!',
-    html: generateOrderemail({
+    html: generateOrderEmail({
       order: body.order,
       total: body.total,
     }),
   });
-  return res.status(200).json({
-    message: 'Success!',
-  });
-
-  // send success or error message
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: 'Success' }),
+  };
 };
