@@ -109,7 +109,7 @@ async function fetchBeersIntoNodes({
   createNodeId,
   createContentDigest,
 }) {
-  const res = await fetch('https://sampleapis.com/beers/api/ale');
+  const res = await fetch('https://api.sampleapis.com/beers/ale');
   const beers = await res.json();
   for (const beer of beers) {
     const nodeMeta = {
