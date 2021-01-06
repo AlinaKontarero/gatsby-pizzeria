@@ -2,20 +2,20 @@ const nodemailer = require('nodemailer');
 
 function generateOrderEmail({ order, total }) {
   return `<div>
-    <h2> Your recent order for ${total} </h2> 
-    <p> Please start walking over, we'll have your order ready in 20 minutes. </p>
-    <ul> 
+    <h2>Your Recent Order for ${total}</h2>
+    <p>Please start walking over, we will have your order ready in the next 20 mins.</p>
+    <ul>
       ${order
         .map(
-          (item) => `<li> 
-      <img src="${item.thumbnail}" alt="${item.name}"/> 
-      ${item.size} ${item.name} - ${item.price}
+          (item) => `<li>
+        <img src="${item.thumbnail}" alt="${item.name}"/>
+        ${item.size} ${item.name} - ${item.price}
       </li>`
         )
         .join('')}
     </ul>
-    <p> Your total is <strong>${total}</strong> due at pickup </p>
-    <style> 
+    <p>Your total is <strong>$${total}</strong> due at pickup</p>
+    <style>
         ul {
           list-style: none;
         }
@@ -27,23 +27,10 @@ function generateOrderEmail({ order, total }) {
 const transporter = nodemailer.createTransport({
   host: process.env.MAIL_HOST,
   port: 587,
-  ignoreTLS: true,
-  secure: false,
-  tls: {
-    rejectUnauthorized: false,
-  },
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
-});
-
-// test an email
-transporter.sendMail({
-  from: "Slick's Slices <slick@example.com>",
-  to: 'orders@example.com',
-  subject: 'New order!',
-  html: `<p>Your new pizza is here!</p>`,
 });
 
 function wait(ms = 0) {
@@ -52,66 +39,57 @@ function wait(ms = 0) {
   });
 }
 
-module.exports = async (req, res) => {
-  const { body } = req;
-  // Check if `honeypot is submitted:
+exports.handler = async (event, context) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+  };
+  const body = JSON.parse(event.body);
+  // Check if they have filled out the honeypot
   if (body.mapleSyrup) {
-    return res.status(400).header('Access-Control-Allow-Origin', '*').json({
-      message: `Woop woop! It's a cyber attack! Good bye, little mother hacker`,
-    });
-    // return {
-    //   statusCode: 400,
-    //   message: `Woop woop! It's a cyber attack! Good bye, little mother hacker`,
-    // };
+    return {
+      statusCode: 400,
+      headers,
+      body: JSON.stringify({ message: 'Boop beep bop zzzzstt good bye' }),
+    };
   }
-
-  // validate coming data
+  // Validate the data coming in is correct
   const requiredFields = ['email', 'name', 'order'];
 
   for (const field of requiredFields) {
     if (!body[field]) {
-      return res
-        .status(400)
-        .header('Access-Control-Allow-Origin', '*')
-        .json({
-          message: `Oops! You forgot to add ${field}`,
-        });
-      // return {
-      //   statusCode: 400,
-      //   body: JSON.stringify({
-      //     message: `Oops! You forgot to add ${field}`,
-      //   }),
-      // };
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          message: `Oops! You are missing the ${field} field`,
+        }),
+      };
     }
   }
 
+  // make sure they actually have items in that order
   if (!body.order.length) {
-    return res.status(400).header('Access-Control-Allow-Origin', '*').json({
-      message: `Why would you order nothing?`,
-    });
-    // return {
-    //   statusCode: 400,
-    //   body: JSON.stringify({
-    //     message: `Why would you order nothing?`,
-    //   }),
-    // };
+    return {
+      statusCode: 400,
+      headers,
+      body: JSON.stringify({
+        message: `Why would you order nothing?!`,
+      }),
+    };
   }
 
-  // send an email
+  // send the email
   const info = await transporter.sendMail({
     from: "Slick's Slices <slick@example.com>",
     to: `${body.name} <${body.email}>, orders@example.com`,
     subject: 'New order!',
-    html: generateOrderEmail({
-      order: body.order,
-      total: body.total,
-    }),
+    html: generateOrderEmail({ order: body.order, total: body.total }),
   });
-  return res.status(200).header('Access-Control-Allow-Origin', '*').json({
-    message: 'Success',
-  });
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify({ message: 'Success' }),
-  // };
+  return {
+    statusCode: 200,
+    headers,
+    body: JSON.stringify({ message: 'Success' }),
+  };
 };
