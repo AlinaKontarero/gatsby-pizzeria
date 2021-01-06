@@ -56,7 +56,7 @@ module.exports = async (req, res) => {
   const { body } = req;
   // Check if `honeypot is submitted:
   if (body.mapleSyrup) {
-    return res.status(400).json({
+    return res.status(400).header('Access-Control-Allow-Origin', '*').json({
       message: `Woop woop! It's a cyber attack! Good bye, little mother hacker`,
     });
     // return {
@@ -70,9 +70,12 @@ module.exports = async (req, res) => {
 
   for (const field of requiredFields) {
     if (!body[field]) {
-      return res.status(400).json({
-        message: `Oops! You forgot to add ${field}`,
-      });
+      return res
+        .status(400)
+        .header('Access-Control-Allow-Origin', '*')
+        .json({
+          message: `Oops! You forgot to add ${field}`,
+        });
       // return {
       //   statusCode: 400,
       //   body: JSON.stringify({
@@ -83,7 +86,7 @@ module.exports = async (req, res) => {
   }
 
   if (!body.order.length) {
-    return res.status(400).json({
+    return res.status(400).header('Access-Control-Allow-Origin', '*').json({
       message: `Why would you order nothing?`,
     });
     // return {
@@ -104,7 +107,7 @@ module.exports = async (req, res) => {
       total: body.total,
     }),
   });
-  return res.status(200).json({
+  return res.status(200).header('Access-Control-Allow-Origin', '*').json({
     message: 'Success',
   });
   // return {
